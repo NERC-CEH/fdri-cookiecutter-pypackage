@@ -1,15 +1,29 @@
 """Bump the project version, commit, and create a CHANGELOG stub."""
 
+import re
 import subprocess
 import sys
 import tomllib
 from pathlib import Path
 
 PYPROJECT = Path("pyproject.toml")
+CITATION = Path("CITATION.cff")
 
 
 def _read_version() -> str:
     return tomllib.loads(PYPROJECT.read_text())["project"]["version"]
+
+
+def _update_citation_version(new_version: str) -> bool:
+    """Rewrite the top-level `version:` line in CITATION.cff. Returns True if the file was changed."""
+    if not CITATION.exists():
+        return False
+    text = CITATION.read_text()
+    new_text, n = re.subn(r"(?m)^version:.*$", f"version: {new_version}", text, count=1)
+    if n == 0 or new_text == text:
+        return False
+    CITATION.write_text(new_text)
+    return True
 
 
 def main() -> None:
@@ -23,7 +37,11 @@ def main() -> None:
     subprocess.run(["uv", "version", "--bump", part], check=True)
     new_version = _read_version()
 
-    subprocess.run(["git", "add", str(PYPROJECT)], check=True)
+    to_commit = [str(PYPROJECT)]
+    if _update_citation_version(new_version):
+        to_commit.append(str(CITATION))
+
+    subprocess.run(["git", "add", *to_commit], check=True)
     subprocess.run(["git", "commit", "-m", f"Bump version: {old_version} -> {new_version}"], check=True)
 
     changelog_path = Path(f"CHANGELOG/{new_version}.md")

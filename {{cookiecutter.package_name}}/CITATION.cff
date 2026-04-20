@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: "{{ cookiecutter.project_name }}"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+  - given-names: "{{ cookiecutter.full_name.rsplit(' ', 1)[0] if ' ' in cookiecutter.full_name else cookiecutter.full_name }}"
+    family-names: "{{ cookiecutter.full_name.rsplit(' ', 1)[1] if ' ' in cookiecutter.full_name else '' }}"
+    email: "{{ cookiecutter.email }}"
+    affiliation: "{{ cookiecutter.organisation }}"
+    #orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: add your ORCID
+abstract: "{{ cookiecutter.project_short_description }}"
+{% if cookiecutter.git_hosting == "github" -%}
+repository-code: "https://github.com/{{ cookiecutter.repo_owner }}/{{ cookiecutter.package_name }}"
+{% elif cookiecutter.git_hosting == "codeberg" -%}
+repository-code: "https://codeberg.org/{{ cookiecutter.repo_owner }}/{{ cookiecutter.package_name }}"
+{% endif -%}
+license: GPL-3.0-or-later
+version: {{ cookiecutter.first_version }}
+contact:
+  - given-names: "{{ cookiecutter.full_name.rsplit(' ', 1)[0] if ' ' in cookiecutter.full_name else cookiecutter.full_name }}"
+    family-names: "{{ cookiecutter.full_name.rsplit(' ', 1)[1] if ' ' in cookiecutter.full_name else '' }}"
+    email: "{{ cookiecutter.email }}"
+    affiliation: "{{ cookiecutter.organisation }}"
+# TODO before publishing / depositing:
+#   - Add ORCID(s) for each author
+#   - Add keywords as NERC vocabulary URIs, e.g.:
+#     keywords:
+#       - "http://onto.nerc.ac.uk/vocab/..."
+# TODO after deposit in a catalogue (e.g. EIDC, Zenodo):
+#   - doi: "10.5281/zenodo.xxxxxx"
+#   - repository: "https://catalogue.ceh.ac.uk/documents/..."
+#   - date-released: "YYYY-MM-DD"
+# See https://github.com/NERC-CEH/repo-guidance/blob/main/cff-guidance/citation-cff_guidelines.md

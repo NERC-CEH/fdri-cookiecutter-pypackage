@@ -120,6 +120,27 @@ If you chose `sphinx` docs, preview them locally:
 make docs-serve  # serves at http://localhost:8000
 ```
 
+## Citation metadata (`CITATION.cff`)
+
+The template generates a `CITATION.cff` at the project root, with some of the fields pre-filled from your prompt answers
+(title, author, email, affiliation, repo URL, version, licence). GitHub renders a **Cite this repository** button
+when this file is present, and tools like Zenodo and Zotero read it automatically.
+
+Before your first tagged release, review the `CITATION.cff` file and update the relevant information, including:
+
+- **ORCID** for each author ([orcid.org](https://orcid.org/))
+- **Keywords** as NERC vocabulary URIs (e.g. `http://onto.nerc.ac.uk/vocab/...`)
+- Split `given-names` / `family-names` correctly if your full name wasn't split cleanly (the template splits naively on
+the last space in the name you provided to the prompt.)
+
+After depositing in a catalogue (EIDC, Zenodo, etc.), also add:
+
+- `doi`
+- `repository`
+- `date-released`
+
+Full guidance can be found here: [NERC-CEH CFF guidelines](https://github.com/NERC-CEH/repo-guidance/blob/main/cff-guidance/citation-cff_guidelines.md).
+
 ## Writing docs
 
 The generated `docs/source/` directory contains `.rst` files to get you started, but you can use Markdown (`.md`) or

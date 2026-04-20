@@ -52,6 +52,7 @@ def _build_commit_message():
         "- pyproject.toml, uv.lock",
         f"- CHANGELOG/{FIRST_VERSION}.md",
         "- LICENSE",
+        "- CITATION.cff",
         "- README.md, CONTRIBUTING.md",
         "- .editorconfig, .gitignore, .githooks/pre-commit",
     ]
