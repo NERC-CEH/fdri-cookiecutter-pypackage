@@ -1,0 +1,20 @@
+{
+  "project_name": "My Package",
+  "package_name": "{{ cookiecutter.project_name.lower().replace(' ', '-').replace('_', '-') }}",
+  "import_name": "{{ cookiecutter.package_name.replace('-', '_') }}",
+  "project_short_description": "A short description of the project.",
+  "full_name": "Your name",
+  "email": "author@ceh.ac.uk",
+  "organisation": "UKCEH",
+  "git_hosting": ["github", "codeberg", "none"],
+  "repo_username": "{% if cookiecutter.git_hosting != 'none' %}{{ cookiecutter.git_hosting }}-username{% else %}n/a{% endif %}",
+  "repo_owner": "{% if cookiecutter.git_hosting != 'none' %}{{ cookiecutter.repo_username }}{% else %}n/a{% endif %}",
+  "first_version": "0.1.0",
+  "license": "GNU GPL v3.0",
+  "publish_to_pypi": ["{% if cookiecutter.git_hosting != 'none' %}no{% else %}n/a{% endif %}", "{% if cookiecutter.git_hosting != 'none' %}yes{% else %}n/a{% endif %}"],
+  "git_flow": ["simple", "github_flow", "main_develop"],
+  "docs_type": ["sphinx", "simple"],
+  "__prompts__": {
+    "publish_to_pypi": "publish_to_pypi (only applicable for GitHub hosting)"
+  }
+}

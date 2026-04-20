@@ -1,0 +1,116 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "{{cookiecutter.package_name}}"
+version = "{{ cookiecutter.first_version }}"
+description = "{{ cookiecutter.project_short_description | replace('\\', '\\\\') | replace('\"', '\\\"') }}"
+readme = "README.md"
+authors = [
+  {name = "{{ cookiecutter.full_name | replace('\\', '\\\\') | replace('\"', '\\\"') }}", email = "{{cookiecutter.email}}"}
+]
+maintainers = [
+  {name = "{{ cookiecutter.full_name | replace('\\', '\\\\') | replace('\"', '\\\"') }}", email = "{{cookiecutter.email}}"}
+]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+]
+license = { file = "LICENSE" }
+dependencies = []
+requires-python = ">= 3.12"
+
+[dependency-groups]
+dev = [
+    { include-group = "lint" },
+    { include-group = "test" },
+    { include-group = "typecheck" },
+{% if cookiecutter.docs_type == "sphinx" %}
+    { include-group = "docs" },
+{% endif %}
+]
+lint = [
+    "ruff",
+]
+test = [
+    "coverage",
+    "pytest",
+    "pytest-cov",
+]
+typecheck = [
+    "pyright",
+]
+docs = [
+    "sphinx",
+    "shibuya>=2025.9.25",
+    "sphinx-copybutton",
+    "sphinx-design>=0.6.1",
+    "sphinx-iconify>=0.2.1",
+    "sphinx-autodoc-typehints",
+    "sphinx-autobuild",
+    "sphinx-contributors>=0.2.7",
+    "myst-parser",
+]
+
+{% if cookiecutter.git_hosting == "github" %}
+[project.urls]
+bugs = "https://github.com/{{cookiecutter.repo_owner}}/{{cookiecutter.package_name}}/issues"
+changelog = "https://github.com/{{cookiecutter.repo_owner}}/{{cookiecutter.package_name}}/releases"
+documentation = "https://{{ cookiecutter.repo_owner }}.github.io/{{ cookiecutter.package_name }}/"
+homepage = "https://github.com/{{cookiecutter.repo_owner}}/{{cookiecutter.package_name}}"
+{% elif cookiecutter.git_hosting == "codeberg" %}
+[project.urls]
+bugs = "https://codeberg.org/{{cookiecutter.repo_owner}}/{{cookiecutter.package_name}}/issues"
+changelog = "https://codeberg.org/{{cookiecutter.repo_owner}}/{{cookiecutter.package_name}}/releases"
+homepage = "https://codeberg.org/{{cookiecutter.repo_owner}}/{{cookiecutter.package_name}}"
+{% endif %}
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["src", "tests"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["src/", "tests/"]
+omit = ["src/*/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 90
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+    "@overload",
+    "@typing.overload",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+    "raise NotImplementedError",
+    "except PackageNotFoundError",
+    "if __name__ == .__main__.",
+    "\\.\\.\\.",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=src --cov-report=term-missing"
+
+[tool.uv]
+package = true
+default-groups = ["dev"]

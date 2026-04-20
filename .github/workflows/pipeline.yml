@@ -1,0 +1,21 @@
+name: Pipeline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+
+  test-python:
+    uses: NERC-CEH/dri-cicd/.github/workflows/test-python.yml@main
+    with:
+      use_uv: true
+      use_pyright: true
+      coverage_threshold: 90

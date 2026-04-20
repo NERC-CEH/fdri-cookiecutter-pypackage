@@ -1,0 +1,8 @@
+- [Usage](usage.md) - prerequisites, prompts, and post-generation steps
+  - [GitHub setup](usage-github.md) - `gh` CLI, account auth, post-generation steps
+  - [Codeberg setup](usage-codeberg.md) - `CODEBERG_TOKEN`, account setup, post-generation steps
+  - Local-only (`git_hosting=none`) needs no extra setup - see [Usage](usage.md)
+- [Git flows and branch protection](git-flows.md) - picking a branching strategy
+- [Releasing](releasing.md) - bumping versions, tagging, and publishing to PyPI
+- [Troubleshooting](troubleshooting.md) - common issues and fixes
+- [Design decisions](design_decisions.md) - why we made the choices we did

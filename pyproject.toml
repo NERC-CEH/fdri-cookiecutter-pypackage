@@ -1,0 +1,72 @@
+[project]
+name = "fdri-cookiecutter-pypackage"
+version = "0.1.0"
+description = "FDRI Cookiecutter template for a Python package"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "GNU GPL v3.0" }
+authors = [
+    { name = "Richard Smith", email = "ricsmi@ceh.ac.uk" }
+]
+dependencies = [
+    "cookiecutter>=2.6.0",
+    "ruff>=0.14.14",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    "*cookiecutter.package_name*"
+    ]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["hooks", "tests", "scripts"]
+exclude = [
+    "*cookiecutter.package_name*",
+]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["tests/"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+[dependency-groups]
+dev = [
+    { include-group = "lint" },
+    { include-group = "test" },
+]
+lint = [
+    "ruff",
+]
+test = [
+    "coverage",
+    "pytest",
+    "pytest-cov",
+    "pytest-cookies",
+    "pyright",
+    "ipdb",
+]
