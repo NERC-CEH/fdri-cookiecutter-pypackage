@@ -63,6 +63,7 @@ def _build_commit_message():
 # GitHub
 # ---------------------------------------------------------------------------
 
+
 def preflight_github():
     """Verify gh CLI can perform every GitHub operation we need.
 
@@ -126,7 +127,10 @@ def create_github_repo():
     visibility = "--private" if choice == "private" else "--public"
 
     result = _run(
-        "gh", "repo", "create", f"{OWNER}/{REPO}",
+        "gh",
+        "repo",
+        "create",
+        f"{OWNER}/{REPO}",
         visibility,
         "--description",
         "{{ cookiecutter.project_short_description | replace('\"', '\\\"') }}",
@@ -216,6 +220,7 @@ def configure_branch_protection(branch):
 # Codeberg
 # ---------------------------------------------------------------------------
 
+
 def _codeberg_api(path, method="GET", payload=None):
     """Make an authenticated Codeberg API call. Returns (status_code, parsed_body)."""
     token = os.environ.get("CODEBERG_TOKEN", "")
@@ -294,6 +299,7 @@ def create_codeberg_repo(current_user):
 # ---------------------------------------------------------------------------
 # Git
 # ---------------------------------------------------------------------------
+
 
 def generate_uv_lock():
     """Generate uv.lock so CI's 'uv sync --locked' has something to pin to."""
@@ -400,6 +406,7 @@ def setup_develop_branch(repo_created, auth_url=None):
 # ---------------------------------------------------------------------------
 # Instructions
 # ---------------------------------------------------------------------------
+
 
 def print_codeberg_instructions():
     print()
