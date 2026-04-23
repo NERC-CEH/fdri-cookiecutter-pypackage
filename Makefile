@@ -1,4 +1,4 @@
-.PHONY: help build bump-patch bump-minor bump-major release test pdb ruff qa ci testall coverage docs-serve docs-build clean clean-build clean-pyc clean-test
+.PHONY: help build bump-patch bump-minor bump-major release test pdb ruff qa ci testall coverage docs-serve docs-build clean clean-build clean-pyc clean-test sync-symlinks
 
 help:  ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "%-20s %s\n", $$1, $$2}'
@@ -74,3 +74,6 @@ clean-pyc:  ## Remove Python file artifacts
 clean-test:  ## Remove test and coverage artifacts
 	rm -f .coverage .coverage.*
 	rm -fr htmlcov/ .pytest_cache
+
+sync-symlinks:  ## Regenerate symlinks in pypackage/ and pyservice/ from _shared/
+	uv run scripts/sync_symlinks.py

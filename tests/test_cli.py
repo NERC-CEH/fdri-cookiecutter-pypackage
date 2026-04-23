@@ -1,9 +1,4 @@
-"""Tests for extra_context argument forwarding.
-
-These tests verify that extra_context values are properly forwarded
-and applied when generating projects. The CLI feature allows passing
-these as key=value arguments.
-"""
+"""Tests for extra_context value handling across various edge-case inputs."""
 
 
 def test_extra_context_single_value(cookies):

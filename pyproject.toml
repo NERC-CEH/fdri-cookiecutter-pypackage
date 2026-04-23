@@ -35,7 +35,8 @@ select = [
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
-include = ["hooks", "tests", "scripts"]
+include = ["pypackage/hooks", "pyservice/hooks", "_shared/hooks", "tests", "scripts"]
+extraPaths = ["_shared/hooks"]
 exclude = [
     "*cookiecutter.package_name*",
 ]
@@ -53,6 +54,7 @@ skip_covered = true
 testpaths = [
     "tests",
 ]
+addopts = "--template=pypackage"
 
 [dependency-groups]
 dev = [

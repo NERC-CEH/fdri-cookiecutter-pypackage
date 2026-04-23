@@ -1,0 +1,1 @@
+../../../../../../_shared/{{cookiecutter.package_name}}/docs/source/_templates/autosummary/attribute.rst

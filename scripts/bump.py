@@ -9,6 +9,11 @@ PYPROJECT = Path("pyproject.toml")
 
 
 def _read_version() -> str:
+    """Read the current project version from pyproject.toml.
+
+    Returns:
+        Version string.
+    """
     return tomllib.loads(PYPROJECT.read_text())["project"]["version"]
 
 
