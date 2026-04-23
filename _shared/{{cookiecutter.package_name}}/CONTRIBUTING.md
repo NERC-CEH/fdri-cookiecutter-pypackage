@@ -94,7 +94,7 @@ Ready to contribute? Here's how to set up {{ cookiecutter.package_name }} for lo
 {% endif %}   ```
 
 1. {% if git_hosting != "none" %}Submit a pull request through the {% if git_hosting == "github" %}GitHub{% else %}Codeberg{% endif %} website.{% else %}Merge your branch into main locally when ready.{% endif %}
-{% elif git_flow == "github_flow" %}
+{% elif git_flow == "github_flow" or git_flow == "main_staging_production" %}
 
 1. Create a branch for local development off `main`:
 
