@@ -3,6 +3,7 @@
 
 import json
 import os
+import pathlib
 import shutil
 import subprocess
 import urllib.error
@@ -24,6 +25,19 @@ def _run(*args, **kwargs):
     kwargs.setdefault("text", True)
     kwargs.setdefault("check", False)
     return subprocess.run(args, **kwargs)
+
+
+def select_license(license_choice):
+    """Rename the chosen license file to LICENSE and remove the unused alternatives."""
+    license_files = {"MIT": "LICENSE.MIT", "GNU GPL v3.0": "LICENSE.GPL"}
+    for name, filename in license_files.items():
+        p = pathlib.Path(filename)
+        if not p.exists():
+            continue
+        if name == license_choice:
+            p.rename("LICENSE")
+        else:
+            p.unlink()
 
 
 def _build_commit_message():
@@ -451,6 +465,8 @@ def print_pypi_trusted_publisher_instructions():
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    select_license("{{ cookiecutter.license }}")
+
     if DOCS_TYPE == "simple":
         shutil.rmtree("docs", ignore_errors=True)
         os.makedirs("docs")

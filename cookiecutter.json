@@ -10,11 +10,12 @@
   "repo_username": "{% if cookiecutter.git_hosting != 'none' %}{{ cookiecutter.git_hosting }}-username{% else %}n/a{% endif %}",
   "repo_owner": "{% if cookiecutter.git_hosting != 'none' %}{{ cookiecutter.repo_username }}{% else %}n/a{% endif %}",
   "first_version": "0.1.0",
-  "license": "GNU GPL v3.0",
+  "license": ["MIT", "GNU GPL v3.0"],
   "publish_to_pypi": ["{% if cookiecutter.git_hosting != 'none' %}no{% else %}n/a{% endif %}", "{% if cookiecutter.git_hosting != 'none' %}yes{% else %}n/a{% endif %}"],
   "git_flow": ["simple", "github_flow", "main_develop"],
   "docs_type": ["sphinx", "simple"],
   "__prompts__": {
     "publish_to_pypi": "publish_to_pypi (only applicable for GitHub hosting)"
-  }
+  },
+  "_extensions": ["jinja2_time.TimeExtension"]
 }
