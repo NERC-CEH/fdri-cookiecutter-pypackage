@@ -13,6 +13,5 @@
   "docs_type": ["sphinx", "simple"],
   "_git_hosting": "github",
   "_git_flow": "main_staging_production",
-  "_publish_to_pypi": "no",
-  "_extensions": ["jinja2_time.TimeExtension"]
+  "_publish_to_pypi": "no"
 }

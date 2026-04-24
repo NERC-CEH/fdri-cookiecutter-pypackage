@@ -9,7 +9,21 @@ import os
 import pathlib
 import shutil
 import subprocess
+from datetime import datetime
 from typing import Any
+
+
+def stamp_year() -> None:
+    """Replace the COOKIECUTTER_YEAR placeholder with the current year in all generated files."""
+    year = str(datetime.now().year)
+    for path in pathlib.Path(".").rglob("*"):
+        if path.is_file():
+            try:
+                text = path.read_text()
+                if "COOKIECUTTER_YEAR" in text:
+                    path.write_text(text.replace("COOKIECUTTER_YEAR", year))
+            except (UnicodeDecodeError, PermissionError):
+                pass
 
 
 def select_license(license_choice: str) -> None:

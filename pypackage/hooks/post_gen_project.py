@@ -24,6 +24,7 @@ from hook_utils import (  # noqa
     preflight_github,  # noqa
     run,  # noqa
     select_license,  # noqa
+    stamp_year,  # noqa
 )
 
 OWNER = "{{ cookiecutter.repo_owner }}"
@@ -325,6 +326,7 @@ def print_pypi_trusted_publisher_instructions() -> None:
 
 
 if __name__ == "__main__":
+    stamp_year()
     select_license("{{ cookiecutter.license }}")
 
     if DOCS_TYPE == "simple":

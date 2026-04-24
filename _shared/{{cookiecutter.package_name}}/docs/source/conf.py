@@ -4,7 +4,7 @@
 from importlib.metadata import version as get_version
 
 project = "{{ cookiecutter.project_name }}"
-copyright = "{% now 'local', '%Y' %}, {{ cookiecutter.organisation }}"
+copyright = "COOKIECUTTER_YEAR, {{ cookiecutter.organisation }}"
 author = "{{ cookiecutter.organisation }}"
 release = get_version("{{ cookiecutter.package_name }}")
 version = release
