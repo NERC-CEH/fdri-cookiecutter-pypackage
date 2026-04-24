@@ -6,9 +6,27 @@ Imported by both `pypackage/hooks/post_gen_project.py` and `pyservice/hooks/post
 
 import json
 import os
+import pathlib
 import shutil
 import subprocess
 from typing import Any
+
+
+def select_license(license_choice: str) -> None:
+    """Rename the chosen license file to LICENSE and remove the unused alternatives.
+
+    Args:
+        license_choice: The license value from cookiecutter, e.g. ``"MIT"`` or ``"GNU GPL v3.0"``.
+    """
+    license_files = {"MIT": "LICENSE.MIT", "GNU GPL v3.0": "LICENSE.GPL"}
+    for name, filename in license_files.items():
+        p = pathlib.Path(filename)
+        if not p.exists():
+            continue
+        if name == license_choice:
+            p.rename("LICENSE")
+        else:
+            p.unlink()
 
 
 def run(*args: str, **kwargs: Any) -> subprocess.CompletedProcess[str]:

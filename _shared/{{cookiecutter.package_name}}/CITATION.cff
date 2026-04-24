@@ -14,7 +14,11 @@ repository-code: "https://github.com/{{ cookiecutter.repo_owner }}/{{ cookiecutt
 {% elif git_hosting == "codeberg" -%}
 repository-code: "https://codeberg.org/{{ cookiecutter.repo_owner }}/{{ cookiecutter.package_name }}"
 {% endif -%}
+{% if cookiecutter.license == "MIT" -%}
+license: MIT
+{%- else -%}
 license: GPL-3.0-or-later
+{%- endif %}
 version: {{ cookiecutter.first_version }}
 contact:
   - given-names: "{{ cookiecutter.full_name.rsplit(' ', 1)[0] if ' ' in cookiecutter.full_name else cookiecutter.full_name }}"

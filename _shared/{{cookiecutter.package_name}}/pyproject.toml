@@ -15,7 +15,11 @@ maintainers = [
   {name = "{{ cookiecutter.full_name | replace('\\', '\\\\') | replace('\"', '\\\"') }}", email = "{{cookiecutter.email}}"}
 ]
 classifiers = [
+{% if cookiecutter.license == "MIT" -%}
+    "License :: OSI Approved :: MIT License",
+{%- else -%}
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+{%- endif %}
     "Programming Language :: Python :: 3",
 ]
 license = { file = "LICENSE" }

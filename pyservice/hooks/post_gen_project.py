@@ -20,6 +20,7 @@ from hook_utils import (  # noqa
     generate_uv_lock,  # noqa
     preflight_github,  # noqa
     run,  # noqa
+    select_license,  # noqa
 )
 
 OWNER = "{{ cookiecutter.repo_owner }}"
@@ -124,6 +125,8 @@ def print_secrets_instructions() -> None:
 
 
 if __name__ == "__main__":
+    select_license("{{ cookiecutter.license }}")
+
     if DOCS_TYPE == "simple":
         shutil.rmtree("docs", ignore_errors=True)
         os.makedirs("docs")
