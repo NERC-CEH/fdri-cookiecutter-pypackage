@@ -10,8 +10,11 @@ import shutil
 import subprocess
 import sys
 
-_shared_hooks = pathlib.Path("{{ cookiecutter._template }}").parent / "_shared" / "hooks"
-sys.path.insert(0, str(_shared_hooks))
+TEMPLATE = pathlib.Path("{{ cookiecutter._template }}")
+SHARED_HOOKS = TEMPLATE / "_shared" / "hooks"
+if not SHARED_HOOKS.exists():
+    SHARED_HOOKS = TEMPLATE.parent / "_shared" / "hooks"
+sys.path.insert(0, str(SHARED_HOOKS))
 
 from hook_utils import (  # noqa
     configure_branch_protection,  # noqa
