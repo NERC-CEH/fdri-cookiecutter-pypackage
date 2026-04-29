@@ -15,12 +15,24 @@ def check_output_inside_dir(command, dirpath):
     return subprocess.check_output(shlex.split(command), cwd=dirpath)
 
 
-def test_license_file_exists(cookies):
+def test_license_mit_default(cookies):
     result = cookies.bake()
     assert result.exit_code == 0
     license_file = result.project_path / "LICENSE"
     assert license_file.exists()
+    assert "MIT License" in license_file.read_text()
+    assert not (result.project_path / "LICENSE.MIT").exists()
+    assert not (result.project_path / "LICENSE.GPL").exists()
+
+
+def test_license_gpl_option(cookies):
+    result = cookies.bake(extra_context={"license": "GNU GPL v3.0"})
+    assert result.exit_code == 0
+    license_file = result.project_path / "LICENSE"
+    assert license_file.exists()
     assert "GNU GENERAL PUBLIC LICENSE" in license_file.read_text()
+    assert not (result.project_path / "LICENSE.MIT").exists()
+    assert not (result.project_path / "LICENSE.GPL").exists()
 
 
 def test_bake_with_defaults(cookies):
