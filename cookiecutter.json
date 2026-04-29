@@ -16,6 +16,5 @@
   "docs_type": ["sphinx", "simple"],
   "__prompts__": {
     "publish_to_pypi": "publish_to_pypi (only applicable for GitHub hosting)"
-  },
-  "_extensions": ["jinja2_time.TimeExtension"]
+  }
 }

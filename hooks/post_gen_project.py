@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import urllib.error
 import urllib.request
+from datetime import datetime
 
 OWNER = "{{ cookiecutter.repo_owner }}"
 REPO = "{{ cookiecutter.package_name }}"
@@ -25,6 +26,19 @@ def _run(*args, **kwargs):
     kwargs.setdefault("text", True)
     kwargs.setdefault("check", False)
     return subprocess.run(args, **kwargs)
+
+
+def stamp_year():
+    """Replace the COOKIECUTTER_YEAR placeholder with the current year in all generated files."""
+    year = str(datetime.now().year)
+    for path in pathlib.Path(".").rglob("*"):
+        if path.is_file():
+            try:
+                text = path.read_text()
+                if "COOKIECUTTER_YEAR" in text:
+                    path.write_text(text.replace("COOKIECUTTER_YEAR", year))
+            except (UnicodeDecodeError, PermissionError):
+                pass
 
 
 def select_license(license_choice):
@@ -465,6 +479,7 @@ def print_pypi_trusted_publisher_instructions():
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    stamp_year()
     select_license("{{ cookiecutter.license }}")
 
     if DOCS_TYPE == "simple":

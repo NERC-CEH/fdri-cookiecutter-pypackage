@@ -10,7 +10,6 @@ authors = [
 ]
 dependencies = [
     "cookiecutter>=2.6.0",
-    "jinja2-time>=0.2.0",
     "ruff>=0.14.14",
 ]
 
@@ -70,5 +69,4 @@ test = [
     "pytest-cookies",
     "pyright",
     "ipdb",
-    "jinja2-time>=0.2.0",
 ]
