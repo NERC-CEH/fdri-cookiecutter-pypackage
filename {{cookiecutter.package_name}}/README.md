@@ -44,6 +44,10 @@ Run quality checks (format, lint, type check, test):
 make qa
 ```
 
+## Citation
+
+If you use this software, please cite it using the metadata in [`CITATION.cff`](./CITATION.cff).
+
 ## Licence
 
 {{ cookiecutter.license }}
