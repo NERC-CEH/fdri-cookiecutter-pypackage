@@ -1,0 +1,1 @@
+../../../../_shared/{{cookiecutter.package_name}}/src/{{cookiecutter.import_name}}/__main__.py

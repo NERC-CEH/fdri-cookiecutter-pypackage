@@ -1,0 +1,1 @@
+../../../_shared/{{cookiecutter.package_name}}/CHANGELOG/{{ cookiecutter.first_version }}.md

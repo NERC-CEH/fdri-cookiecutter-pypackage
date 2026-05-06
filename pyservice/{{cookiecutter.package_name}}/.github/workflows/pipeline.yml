@@ -1,0 +1,72 @@
+name: Pipeline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - staging
+      - production
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  actions: read
+  pull-requests: write
+
+jobs:
+
+  test-python:
+    uses: NERC-CEH/dri-cicd/.github/workflows/test-python.yml@main
+    with:
+      use_uv: true
+      use_pyright: true
+      coverage_threshold: 90
+      localstack_profile_name: localstack
+
+  build-test-deploy-docker-staging:
+    needs: [test-python]
+    if: ${{ '{{' }} github.ref_name == 'staging' || github.base_ref == 'staging' {{ '}}' }}
+    uses: NERC-CEH/dri-cicd/.github/workflows/build-test-deploy-docker.yml@main
+    with:
+      use_uv: true
+      package_name: {{ cookiecutter.import_name }}
+      event_type: ${{ '{{' }} github.event_name {{ '}}' }}
+    secrets:
+      AWS_REGION: ${{ '{{' }} secrets.AWS_REGION {{ '}}' }}
+      AWS_ROLE_ARN: ${{ '{{' }} secrets.AWS_ROLE_ARN_STAGING {{ '}}' }}
+
+  build-test-deploy-docker-production:
+    needs: [test-python]
+    if: ${{ '{{' }} github.ref_name == 'production' || github.base_ref == 'production' {{ '}}' }}
+    uses: NERC-CEH/dri-cicd/.github/workflows/build-test-deploy-docker.yml@main
+    with:
+      use_uv: true
+      package_name: {{ cookiecutter.import_name }}
+      event_type: ${{ '{{' }} github.event_name {{ '}}' }}
+    secrets:
+      AWS_REGION: ${{ '{{' }} secrets.AWS_REGION {{ '}}' }}
+      AWS_ROLE_ARN: ${{ '{{' }} secrets.AWS_ROLE_ARN_PRODUCTION {{ '}}' }}
+
+  create-staging-to-production-pr:
+    needs: [build-test-deploy-docker-staging]
+    if: ${{ '{{' }} needs.build-test-deploy-docker-staging.result == 'success' && github.event_name == 'push' {{ '}}' }}
+    uses: NERC-CEH/dri-cicd/.github/workflows/auto-create-pr.yml@main
+    with:
+      base: production
+      head: staging
+{% if cookiecutter.docs_type == "sphinx" %}
+  build-docs:
+    uses: NERC-CEH/dri-cicd/.github/workflows/build-docs.yml@main
+    with:
+      use_uv: true
+      pages_artifact_name: pages-artifact
+
+  deploy-docs:
+    needs: [build-docs]
+    if: github.ref == 'refs/heads/production'
+    uses: NERC-CEH/dri-cicd/.github/workflows/deploy-docs.yml@main
+    with:
+      pages_artifact_name: pages-artifact
+{% endif %}

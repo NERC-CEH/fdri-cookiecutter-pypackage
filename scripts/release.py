@@ -6,11 +6,17 @@ from pathlib import Path
 
 
 def _run(*cmd: str) -> None:
+    """Print and execute a command, raising on non-zero exit.
+
+    Args:
+        *cmd: Command and arguments to run.
+    """
     print(f"$ {' '.join(cmd)}")  # noqa: T201
     subprocess.run(cmd, check=True)
 
 
 def main() -> None:
+    """Tag the current version, push it, and create a GitHub release."""
     pyproject = tomllib.loads(Path("pyproject.toml").read_text())
     name = pyproject["project"]["name"]
     version = pyproject["project"]["version"]

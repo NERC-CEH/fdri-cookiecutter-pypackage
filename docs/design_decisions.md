@@ -8,7 +8,7 @@ Key choices made in this template and why.
 groups cleanly. The template uses dependency groups (`dev`, `test`, `lint`, `typecheck`, `docs`) so `uv sync`
 installs exactly what each context needs.
 
-`uv version --bump patch/minor/major` is also used for version bumping, so no extra tool is needed - see [Releasing](usage.md#releasing).
+`uv version --bump patch/minor/major` is also used for version bumping, so no extra tool is needed - see [Releasing](pypackage/releasing.md).
 
 ## Hatchling as the build backend
 
@@ -56,7 +56,7 @@ testing, docs build, docs deploy. An additional local workflow handles the (opti
 + `autosummary` generate API reference pages from docstrings without requiring a separate tool.
 
 [MyST-Parser](https://myst-parser.readthedocs.io/) is included so documentation pages can be written in either Markdown (`.md`) or reStructuredText
-(`.rst`) - see [Writing docs](usage.md#writing-docs) in the usage guide.
+(`.rst`) - see [Writing docs](pypackage/usage.md#writing-docs) in the usage guide.
 
 ### Shibuya theme
 Using a theme allows us to have consistency across FDRI packages.
@@ -113,6 +113,61 @@ tags, pushes, and prints the URL to create a release in the web UI; on `none` it
 
 `publish_to_pypi=yes` is only valid with `git_hosting=github` - trusted publishing relies on GitHub's OIDC identity,
 which has no equivalent on Codeberg or for a local-only repo. The combination is blocked in `pre_gen_project.py`.
+
+## Two templates in one repo (`pypackage` and `pyservice`)
+
+A Python library and a Python service have different deployment targets, different CI pipelines, and different
+release conventions - but the same development tooling (uv, ruff, pytest, pyright, Sphinx) and the same project
+scaffold (src layout, Makefile, CHANGELOG, CITATION.cff, etc.).
+
+Keeping both templates in one repo means:
+
+- a single place to update shared tooling decisions (e.g. upgrading to a new Python version or ruff release)
+- shared docs and conventions live in one place
+
+The alternative would be separate repos - which would be more difficult to synchronise changes across both.
+
+Cookiecutter's `--directory` flag (e.g. `--directory=pypackage`) selects which subdirectory to treat as the
+template root. Everything outside that directory is invisible to the user.
+See: https://cookiecutter.readthedocs.io/en/1.7.2/advanced/directories.html
+
+## Symlinks for shared template files (`_shared/`)
+
+Many files are identical across `pypackage` and `pyservice` - e.g. the `src/` skeleton, `tests/`, Sphinx config,
+CHANGELOG stub, `pyproject.toml`, `.githooks/`, etc.
+
+Files that are identical live in `_shared/{{cookiecutter.package_name}}/` and are symlinked into both
+template directories. Cookiecutter follows symlinks when copying files, so generated projects receive
+real file copies - symlinks are a detail of the template repo structure, invisible to users.
+
+A script (`make sync-symlinks`) regenerates all symlinks from `_shared/` in case they are accidentally removed or
+a new shared file is added. A test suite (`tests/test_shared_symlinks.py`) asserts that every file in `_shared/`
+has a corresponding valid symlink in both templates, and runs as part of CI to try and guard against files being missed.
+
+## Shared hook code (`_shared/hooks/hook_utils.py`)
+
+Both templates have a `post_gen_project.py` hook that does similar work - preflighting `gh`, creating the GitHub
+repo, enabling Pages, configuring branch protection, generating `uv.lock`. Rather than duplicate the helpers in
+each hook, the shared ones live in `_shared/hooks/hook_utils.py` and are imported from both hooks at render time:
+
+```python
+_TEMPLATE_DIR = "{{ cookiecutter._template }}"
+sys.path.insert(0, os.path.normpath(os.path.join(_TEMPLATE_DIR, "..", "_shared", "hooks")))
+from hook_utils import preflight_github, create_github_repo, ...
+```
+
+Cookiecutter sets `cookiecutter._template` to the template directory path, so `../_shared/hooks/` resolves to the
+repo root's `_shared/hooks/` regardless of where the template was cloned to (local checkout, `~/.cookiecutters/`
+cache, or a CI runner's temp dir). Template-specific logic (commit message, Codeberg API, AWS secrets prompt,
+3-branch git init) stays in each hook; the shared functions are parameterised where the two templates diverge
+(`default_visibility`, `warn_branch_protection`).
+
+Bake tests pass the template as a relative path, which cookiecutter preserves as-is in `_template`. Tests resolve
+to an absolute path so the hook can find `_shared/hooks/` after cookiecutter changes cwd to the generated project
+directory. Real users always hit this via an absolute path (either a local absolute path or a cloned cache dir).
+
+A function-based approach was chosen over a class hierarchy: the two templates only diverge on two parameters, so
+class inheritance would be ceremony without payoff. If a third template lands or divergence grows, revisit.
 
 ## CHANGELOG directory
 

@@ -1,0 +1,17 @@
+{
+  "project_name": "My Service",
+  "package_name": "{{ cookiecutter.project_name.lower().replace(' ', '-').replace('_', '-') }}",
+  "import_name": "{{ cookiecutter.package_name.replace('-', '_') }}",
+  "project_short_description": "A short description of the service.",
+  "full_name": "Your name",
+  "email": "author@ceh.ac.uk",
+  "organisation": "UKCEH",
+  "repo_username": "github-username",
+  "repo_owner": "NERC-CEH",
+  "first_version": "0.1.0",
+  "license": ["MIT", "GNU GPL v3.0"],
+  "docs_type": ["sphinx", "simple"],
+  "_git_hosting": "github",
+  "_git_flow": "staging_production",
+  "_publish_to_pypi": "no"
+}

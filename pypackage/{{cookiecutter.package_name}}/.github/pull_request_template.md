@@ -1,0 +1,1 @@
+../../../_shared/{{cookiecutter.package_name}}/.github/pull_request_template.md
