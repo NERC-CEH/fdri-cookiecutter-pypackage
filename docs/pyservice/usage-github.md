@@ -50,15 +50,14 @@ your own account when prompted.
 
 ### AWS OIDC roles
 
-The pipeline deploys Docker images to three environments using AWS OIDC. Before the
-first deployment succeeds you need four IAM roles - one per environment plus the region:
+The pipeline deploys Docker images to two environments using AWS OIDC. Before the
+first deployment succeeds you need three secrets - one per environment plus the region:
 
-| Secret                    | What it is                                       |
-|---------------------------|--------------------------------------------------|
-| `AWS_REGION`              | AWS region, e.g. `eu-west-2`                     |
-| `AWS_ROLE_ARN`            | OIDC role for the **current** (main) environment |
-| `AWS_ROLE_ARN_STAGING`    | OIDC role for the **staging** environment        |
-| `AWS_ROLE_ARN_PRODUCTION` | OIDC role for the **production** environment     |
+| Secret                    | What it is                                |
+|---------------------------|-------------------------------------------|
+| `AWS_REGION`              | AWS region, e.g. `eu-west-2`             |
+| `AWS_ROLE_ARN_STAGING`    | OIDC role for the **staging** environment |
+| `AWS_ROLE_ARN_PRODUCTION` | OIDC role for the **production** environment |
 
 Ask an admin for the correct details for your service. See the [dri-cicd docs](https://github.com/NERC-CEH/dri-cicd)
 for more information.
@@ -72,20 +71,20 @@ After generation, the hook:
 3. Creates the GitHub repo under `repo_owner/package_name`
 4. Enables GitHub Pages
 5. Initialises git and makes the initial commit
-6. Creates `staging` and `production` branches, then pushes all three (`main`, `staging`, `production`) to GitHub
-7. Applies branch protection to all three branches (requires 1 approving review + passing CI)
+6. Initialises git on `staging`, creates `production`, then pushes both to GitHub
+7. Applies branch protection to both branches (requires 1 approving review + passing CI)
 
 If `gh` is not available, you get the local project and initial commit but must push manually.
 
 ## AWS secrets
 
-After the repo is created, add the four secrets before merging anything to `main`:
+After the repo is created, add the three secrets before merging anything to `staging`:
 
 1. Go to `https://github.com/<repo_owner>/<package_name>/settings/secrets/actions`
-2. Add each of the four secrets listed above
+2. Add each of the three secrets listed above
 
-The pipeline will fail on any push to `main`, `staging`, or `production` until these are present.
+The pipeline will fail on any push to `staging` or `production` until these are present.
 
 ## GitHub Pages
 
-Pages is configured to deploy from GitHub Actions. Docs go live after the first push to `main` triggers the pipeline.
+Pages is configured to deploy from GitHub Actions. Docs go live after the first push to `staging` or `production` triggers the pipeline.

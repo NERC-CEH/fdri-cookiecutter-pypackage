@@ -27,7 +27,7 @@ If you are unsure, ask!
 
 - [Usage](pyservice/usage.md) - prerequisites, prompts, post-generation steps
 - [GitHub and AWS setup](pyservice/usage-github.md) - `gh` CLI, AWS OIDC secrets
-- [Git flow](pyservice/git-flows.md) - `main -> staging -> production` model
+- [Git flow](pyservice/git-flows.md) - `staging -> production` model
 - [Releasing](pyservice/releasing.md) - bumping versions, deploying to production
 
 ## Repo notes

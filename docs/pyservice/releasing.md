@@ -22,11 +22,10 @@ Fill in the CHANGELOG stub before opening your PR.
 
 Deployment is triggered by merging through the branch chain - there is no separate release script.
 
-1. Merge your feature PR into `main` - deploys to the current environment
-2. Review and merge the auto-PR `main -> staging` - deploys to staging
-3. Review and merge the auto-PR `staging -> production` - deploys to production
+1. Merge your feature PR into `staging` - deploys to staging
+2. Review and merge the auto-PR `staging -> production` - deploys to production
 
-Tag the commit on `main` after it reaches production if you want a named checkpoint:
+Tag the commit on `production` after it reaches production if you want a named checkpoint:
 
 ```bash
 git tag v<version>

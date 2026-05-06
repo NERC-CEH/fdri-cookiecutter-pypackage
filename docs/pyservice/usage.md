@@ -37,16 +37,16 @@ uvx cookiecutter gh:NERC-CEH/fdri-cookiecutter-pypackage --directory=pyservice
 | `organisation`              | `UKCEH`            | Your organisation name                                                        |
 | `repo_username`             | -                  | Your GitHub username (used for authentication checks)                         |
 | `first_version`             | `0.1.0`            | Starting version in `pyproject.toml`                                          |
-| `license`                   | `GNU GPL v3.0`     | Recorded in `pyproject.toml`                                                  |
+| `license`                   | `MIT`              | Recorded in `pyproject.toml`                                                  |
 | `docs_type`                 | `sphinx`           | `sphinx` builds a full Sphinx site; `simple` creates a bare `docs/` directory |
 
 Unlike `pypackage`, there are no prompts for `git_hosting`, `git_flow`, or `publish_to_pypi` - services always use
-GitHub, the fixed `main -> staging -> production` flow, and are never published to PyPI. The repo owner is always
+GitHub, the fixed `staging -> production` flow, and are never published to PyPI. The repo owner is always
 `NERC-CEH` and cannot be changed.
 
 ## After generation
 
-**Before the first push to `main` will trigger a successful deploy**, you must add four AWS secrets to the GitHub
+**Before the first push to `staging` will trigger a successful deploy**, you must add the AWS secrets to the GitHub
 repository. See [GitHub and AWS setup](usage-github.md#aws-secrets) for the exact steps.
 
 See [After generation](../after-generation.md) for citation metadata and writing docs.

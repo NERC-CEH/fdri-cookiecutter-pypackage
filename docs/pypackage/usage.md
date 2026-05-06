@@ -33,7 +33,7 @@ uvx cookiecutter gh:NERC-CEH/fdri-cookiecutter-pypackage --directory=pypackage
 | `repo_username`             | -                  | Your personal username on the chosen host (unused for `none`)                            |
 | `repo_owner`                | `repo_username`    | Organisation or username that will own the repo (unused for `none`)                      |
 | `first_version`             | `0.1.0`            | Starting version in `pyproject.toml`                                                     |
-| `license`                   | `GNU GPL v3.0`     | Recorded in `pyproject.toml`                                                             |
+| `license`                   | `MIT`              | Recorded in `pyproject.toml`                                                             |
 | `publish_to_pypi`           | `no`               | `yes` adds `publish.yml` and PyPI setup instructions (GitHub only)                       |
 | `git_flow`                  | `simple`           | Branching workflow - see [Choosing a git flow](git-flows.md)                             |
 | `docs_type`                 | `sphinx`           | `sphinx` builds a full Sphinx site; `simple` creates a bare `docs/` directory            |
