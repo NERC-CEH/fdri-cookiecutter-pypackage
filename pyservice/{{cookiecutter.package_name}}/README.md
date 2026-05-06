@@ -6,11 +6,10 @@
 
 ## Deployment
 
-This service uses a `main` / `staging` / `production` branching model. Each branch maps to a separate AWS account.
+This service uses a `staging` / `production` branching model. Each branch maps to a separate AWS account.
 
-* Feature branches -> PR into `main` (local/dev AWS account)
-* `main` -> auto-PR opened into `staging`
-* `staging` -> auto-PR opened into `production`
+* Feature branches -> PR into `staging` (staging AWS account)
+* `staging` -> auto-PR opened into `production` (production AWS account)
 
 See [`docs/deployment.md`](./docs/deployment.md) for the full flow and the required GitHub repo secrets.
 

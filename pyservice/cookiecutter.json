@@ -12,6 +12,6 @@
   "license": ["MIT", "GNU GPL v3.0"],
   "docs_type": ["sphinx", "simple"],
   "_git_hosting": "github",
-  "_git_flow": "main_staging_production",
+  "_git_flow": "staging_production",
   "_publish_to_pypi": "no"
 }

@@ -1,7 +1,7 @@
 """Post-generation hook for the pyservice template.
 
 Runs inside the newly generated project directory. Handles docs, GitHub repo creation, uv.lock generation,
-git initialisation across the main/staging/production branches, branch protection, and AWS secrets guidance.
+git initialisation across the staging/production branches, branch protection, and AWS secrets guidance.
 """
 
 import os
@@ -34,7 +34,7 @@ FIRST_VERSION = "{{ cookiecutter.first_version }}"
 DOCS_TYPE = "{{ cookiecutter.docs_type }}"
 DESCRIPTION = "{{ cookiecutter.project_short_description | replace('\"', '\\\"') }}"
 
-BRANCHES = ["main", "staging", "production"]
+BRANCHES = ["staging", "production"]
 
 
 def _build_commit_message() -> str:
@@ -49,7 +49,7 @@ def _build_commit_message() -> str:
         f"- src/{IMPORT_NAME}/ package with __init__, __main__",
         f"- tests/test_{IMPORT_NAME}.py",
         "- Dockerfile (uv-based multi-stage)",
-        "- .github/workflows/pipeline.yml (test + build/deploy docker, auto-PR main->staging->production)",
+        "- .github/workflows/pipeline.yml (test + build/deploy docker, auto-PR staging->production)",
     ]
     if DOCS_TYPE == "sphinx":
         lines.append("- docs/ with Sphinx configuration and Shibuya theme")
@@ -69,15 +69,15 @@ def _build_commit_message() -> str:
 
 
 def git_init_and_push_all_branches(repo_created: bool) -> None:
-    """Initialise git, commit, and push all three environment branches.
+    """Initialise git, commit, and push both environment branches.
 
-    Creates main, staging, and production branches. Pushes all three to origin if a remote repo was created.
+    Creates staging (default) and production branches. Pushes both to origin if a remote repo was created.
 
     Args:
         repo_created: Whether a remote repo exists to push to.
     """
     try:
-        subprocess.run(["git", "init", "-b", "main"], capture_output=True, check=True)
+        subprocess.run(["git", "init", "-b", "staging"], capture_output=True, check=True)
         subprocess.run(["git", "config", "core.hooksPath", ".githooks"], capture_output=True, check=True)
         subprocess.run(["git", "add", "."], capture_output=True, check=True)
         subprocess.run(["git", "commit", "-m", _build_commit_message()], capture_output=True, check=True)
@@ -86,12 +86,11 @@ def git_init_and_push_all_branches(repo_created: bool) -> None:
         print("  Could not initialize git repo.")
         return
 
-    for branch in ("staging", "production"):
-        try:
-            subprocess.run(["git", "branch", branch], capture_output=True, check=True)
-        except subprocess.CalledProcessError:
-            print(f"  Could not create {branch} branch.")
-            return
+    try:
+        subprocess.run(["git", "branch", "production"], capture_output=True, check=True)
+    except subprocess.CalledProcessError:
+        print("  Could not create production branch.")
+        return
     print("  Created staging and production branches")
 
     if not repo_created:
@@ -120,7 +119,6 @@ def print_secrets_instructions() -> None:
     print(f"    https://github.com/{OWNER}/{REPO}/settings/secrets/actions")
     print()
     print("    AWS_REGION                 (e.g. eu-west-2)")
-    print("    AWS_ROLE_ARN               (OIDC role in the 'current' AWS account, used from main)")
     print("    AWS_ROLE_ARN_STAGING       (OIDC role in the staging AWS account)")
     print("    AWS_ROLE_ARN_PRODUCTION    (OIDC role in the production AWS account)")
     print()
