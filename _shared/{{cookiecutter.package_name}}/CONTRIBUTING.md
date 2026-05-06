@@ -94,7 +94,7 @@ Ready to contribute? Here's how to set up {{ cookiecutter.package_name }} for lo
 {% endif %}   ```
 
 1. {% if git_hosting != "none" %}Submit a pull request through the {% if git_hosting == "github" %}GitHub{% else %}Codeberg{% endif %} website.{% else %}Merge your branch into main locally when ready.{% endif %}
-{% elif git_flow == "github_flow" or git_flow == "main_staging_production" %}
+{% elif git_flow == "github_flow" %}
 
 1. Create a branch for local development off `main`:
 
@@ -127,6 +127,38 @@ Ready to contribute? Here's how to set up {{ cookiecutter.package_name }} for lo
    - CI checks (`test-python`{% if cookiecutter.docs_type == "sphinx" %}, `build-docs`{% endif %}) must pass.
    - All PR review conversations must be resolved.
 {%- endif %}
+{% elif git_flow == "staging_production" %}
+
+1. Create a branch for local development off `staging`:
+
+   ```sh
+   git checkout staging
+   git pull origin staging
+   git checkout -b name-of-your-bugfix-or-feature
+   ```
+
+   Now you can make your changes locally.
+
+1. When you're done making changes, check that your changes pass linting and the tests:
+
+   ```sh
+   make qa
+   ```
+
+1. Commit your changes and push your branch to GitHub:
+
+   ```sh
+   git add .
+   git commit -m "Your detailed description of your changes."
+   git push origin name-of-your-bugfix-or-feature
+   ```
+
+1. Open a pull request targeting `staging` through the GitHub website.
+
+   **Branch protection on `staging` and `production`:**
+   - At least 1 approving review is required before merge.
+   - CI checks (`test-python`{% if cookiecutter.docs_type == "sphinx" %}, `build-docs`{% endif %}) must pass.
+   - All PR review conversations must be resolved.
 {% elif git_flow == "main_develop" %}
 
 1. Create a branch for local development off `develop`:

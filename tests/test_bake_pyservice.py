@@ -36,14 +36,11 @@ def test_no_publish_workflow(cookies):
 
 
 def test_shared_contributing_git_flow(cookies):
-    """Shared CONTRIBUTING.md renders git_flow variants correctly in pyservice."""
-    result = cookies.bake(
-        template=PYSERVICE,
-        extra_context={"git_flow": "github_flow"},
-    )
+    """Shared CONTRIBUTING.md renders the staging/production git flow for pyservice."""
+    result = cookies.bake(template=PYSERVICE)
     assert result.exit_code == 0
     contributing = (result.project_path / "CONTRIBUTING.md").read_text()
-    assert "off `main`" in contributing
+    assert "off `staging`" in contributing
 
 
 def test_pipeline_has_docker_jobs(cookies):
