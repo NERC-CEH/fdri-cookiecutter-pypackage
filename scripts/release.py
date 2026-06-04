@@ -50,11 +50,17 @@ def main() -> None:
         print(f"On develop - opening release PR for {tag} rather than tagging.")  # noqa: T201
         result = subprocess.run(
             [
-                "gh", "pr", "create",
-                "--base", "main",
-                "--head", "develop",
-                "--title", f"Release {tag}",
-                "--body-file", str(notes_path),
+                "gh",
+                "pr",
+                "create",
+                "--base",
+                "main",
+                "--head",
+                "develop",
+                "--title",
+                f"Release {tag}",
+                "--body-file",
+                str(notes_path),
             ],
             check=False,
         )
@@ -65,7 +71,9 @@ def main() -> None:
                 "After merging, run `make release` from main to tag and publish."
             )
         else:
-            print(f"\nRelease PR opened for {tag}.\nAfter it is merged, run `make release` from main to tag and publish.")  # noqa: T201
+            print(
+                f"\nRelease PR opened for {tag}.\nAfter it is merged, run `make release` from main to tag and publish."
+            )  # noqa: T201
         return
 
     if branch != "main":
