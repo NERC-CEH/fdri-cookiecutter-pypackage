@@ -13,8 +13,9 @@ make bump-major   # 0.1.0 -> 1.0.0
 Each command:
 
 1. Bumps the version in `pyproject.toml`
-2. Creates a CHANGELOG stub at `CHANGELOG/<new_version>.md`
-3. Commits both with a standard message
+2. Runs `uv lock` to update the lockfile
+3. Commits `pyproject.toml` and `uv.lock` (and `CITATION.cff` if present) with a standard message
+4. Creates a CHANGELOG stub at `CHANGELOG/<new_version>.md` and commits it separately
 
 Fill in the CHANGELOG stub before opening your PR.
 
