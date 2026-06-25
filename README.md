@@ -52,5 +52,4 @@ then merge `develop -> main`.
 
 3. **The `release-ready` job** verifies the changelog is filled in before the PR can be merged to `main`.
 
-4. **After merge to `main`** - run `make release` from `main`. This tags the commit and creates a GitHub release using
-   the changelog as release notes.
+4. **On merge to `main`** - the `release` job in `pipeline.yml` runs automatically, tagging the commit and creating a GitHub release using the changelog as release notes.

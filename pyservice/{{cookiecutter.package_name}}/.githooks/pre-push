@@ -25,6 +25,13 @@ while read local_ref local_sha remote_ref remote_sha; do
     # remote_sha is all zeros when the branch is being created on the remote
     # for the first time.
 
+    # Only branch pushes need a version bump. Skip tags and other refs -
+    # `make release` pushes a tag (refs/tags/*), which must not be bumped.
+    case "$remote_ref" in
+        refs/heads/*) ;;
+        *) continue ;;
+    esac
+
     # Skip deletions - nothing to bump.
     if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
         continue
