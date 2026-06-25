@@ -37,6 +37,16 @@ while read local_ref local_sha remote_ref remote_sha; do
         continue
     fi
 
+    # Only bump the branch that is currently checked out. The bump commit is
+    # created on HEAD, so if the ref being pushed is not HEAD (e.g. pushing
+    # `production` while `staging` is checked out), the bump would land on the
+    # wrong branch and never advance the pushed ref - the recursive push below
+    # would then re-fire this hook forever, bumping endlessly. Skip instead.
+    head_sha=$(git rev-parse HEAD 2>/dev/null)
+    if [ "$local_sha" != "$head_sha" ]; then
+        continue
+    fi
+
     # For a new branch, there is no previous remote tip to diff against, so
     # fall back to comparing against origin/staging.
     if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
@@ -64,7 +74,14 @@ while read local_ref local_sha remote_ref remote_sha; do
         # The recursive push re-fires this hook, but the second invocation sees
         # the bumped version line and skips the bump (no recursion). Use $local_ref
         # (the branch name) so the push uses the new HEAD that includes the bump.
-        if git push "$remote" "$local_ref:$remote_ref"; then
+        #
+        # We set upstream here because we abort the original push below, so its
+        # --set-upstream would otherwise be lost. Skip it for raw URL remotes.
+        upstream_flag=""
+        if git config "remote.$remote.url" >/dev/null 2>&1; then
+            upstream_flag="--set-upstream"
+        fi
+        if git push $upstream_flag "$remote" "$local_ref:$remote_ref"; then
             echo ""
             echo "Pre-push: bumped branch pushed successfully. Aborting the original push -"
             echo "the 'failed to push' message below is expected and can be ignored."
