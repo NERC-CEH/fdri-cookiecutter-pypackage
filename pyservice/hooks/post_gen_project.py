@@ -111,7 +111,11 @@ def git_init_and_push_all_branches(repo_created: bool) -> None:
         return
 
     for branch in BRANCHES:
-        result = run("git", "push", "-u", "origin", branch)
+        # --no-verify skips the pre-push hook for these initial scaffold pushes.
+        # Both branches start at the baseline version and must not be bumped; the
+        # hook also bumps HEAD (staging), so pushing production through it would
+        # loop forever bumping staging while production never advances.
+        result = run("git", "push", "--no-verify", "-u", "origin", branch)
         if result.returncode == 0:
             print(f"  Pushed {branch} to origin")
         else:
